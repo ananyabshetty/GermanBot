@@ -1,1 +1,1 @@
-web: gunicorn Germot:app
+web: gunicorn Main:app
