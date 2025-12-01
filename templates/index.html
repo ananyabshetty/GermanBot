@@ -411,14 +411,17 @@ function toggleSpeech(text, btn) {
  * Extracts clean text from bot response, removing bullets, special chars, and formatting
  */
 function extractCleanText(text) {
-    // Remove bullet points, dashes, arrows, and special formatting
+    // Remove bullet points and arrows while preserving actual text
     let cleanText = text
-        .replace(/•\s*/g, '')               // Remove bullet points
-        .replace(/\s*[-→]*\s*/g, ' ')       // Replace dashes and arrows with space
-        .replace(/\[.*?\]/g, '')            // Remove bracketed content like [One short...]
+        .replace(/•/g, '')      // Remove bullet points
+        .replace(/→/g, '')      // Remove arrows
+        .replace(/\[.*?\]/g, '') // Remove bracketed hints
         .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0 && line !== '-' && line !== '•' && line !== '→')
+        .map(line => {
+            // Remove leading dashes from each line
+            return line.replace(/^\s*-\s*/gm, '').trim();
+        })
+        .filter(line => line.length > 0 && line.trim() !== '')
         .join('. ');
     
     // Clean up extra spaces
