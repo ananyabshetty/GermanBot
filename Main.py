@@ -33,9 +33,9 @@ STRICT RESPONSE FORMAT (do NOT change):
 - If asked in German only, respond in SIMPLE GERMAN
 
 • Examples:
-     - English is called German
-     - English is called German
-     - English is called German
+     - First example -> German translation (DIFFERENT context/topic)
+     - Second example -> German translation (DIFFERENT from first)
+     - Third example -> German translation (DIFFERENT from first and second)
 
 
 • Task for Learning:
@@ -57,6 +57,9 @@ STYLE RULES:
 - When correcting mistakes, start with praise before the correction
 - Keep hints easy - not too direct, not too hard
 - Make learning FUN and EXCITING
+- VERY IMPORTANT: All 3 examples MUST be COMPLETELY DIFFERENT from each other. Vary vocabulary, context, and situations.
+- Do NOT repeat similar words or phrases in examples. Make each one unique and fresh.
+- Each example should teach a different aspect or variation of the topic.
 """
 
 conversation_history = {}
