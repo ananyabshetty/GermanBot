@@ -433,12 +433,18 @@ function toggleSpeech(text, btn) {
         startSpeech(text, btn);
     } else {
         // Same message clicked, toggle pause/resume
-        if (isPaused) {
+        // Check current state of speech synthesis
+        const isCurrentlySpeaking = window.speechSynthesis.speaking && !window.speechSynthesis.paused;
+        const isCurrentlyPaused = window.speechSynthesis.paused;
+        
+        if (isCurrentlyPaused) {
+            // Currently paused, resume it
             resumeSpeech(btn);
-        } else if (window.speechSynthesis.speaking) {
+        } else if (isCurrentlySpeaking) {
+            // Currently speaking, pause it
             pauseSpeech(btn);
         } else {
-            // If speech finished or stopped, start speech again
+            // Not speaking, start from beginning
             startSpeech(text, btn);
         }
     }
@@ -462,18 +468,24 @@ function updateButtonState(btn, isPlaying) {
 }
 
 /**
- * Extracts clean text from bot response, removing bullets, special chars, and formatting
+ * Extracts clean text from bot response, removing ALL special chars and formatting
  */
 function extractCleanText(text) {
-    // Remove bullet points and arrows while preserving actual text
+    // Remove bullet points, arrows, brackets, asterisks and special characters
     let cleanText = text
-        .replace(/•/g, '')      // Remove bullet points
-        .replace(/→/g, '')      // Remove arrows
-        .replace(/\[.*?\]/g, '') // Remove bracketed hints
+        .replace(/•/g, '')           // Remove bullet points
+        .replace(/→/g, '')           // Remove arrows
+        .replace(/\[.*?\]/g, '')     // Remove bracketed content
+        .replace(/\*\*/g, '')        // Remove bold markers
+        .replace(/\*/g, '')          // Remove asterisks
+        .replace(/~/g, '')           // Remove tildes
+        .replace(/`/g, '')           // Remove backticks
+        .replace(/\_/g, '')          // Remove underscores
+        .replace(/\*\*/g, '')        // Remove markdown bold
         .split('\n')
         .map(line => {
-            // Remove leading dashes from each line
-            return line.replace(/^\s*-\s*/gm, '').trim();
+            // Remove leading dashes and special characters from each line
+            return line.replace(/^\s*[-•*\-\→]+\s*/gm, '').trim();
         })
         .filter(line => line.length > 0 && line.trim() !== '')
         .join('. ');
